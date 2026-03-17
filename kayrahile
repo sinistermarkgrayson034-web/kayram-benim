@@ -1,52 +1,59 @@
---[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
---// Anti Cheat Disabler (ONLY RUN ONCE DELETE THIS LINE AFTER RAN)
+--// Anti Cheat Disabler
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua", true))()
 
 --// Services
 local replicated_storage = game:GetService("ReplicatedStorage")
 local local_player = game:GetService("Players").LocalPlayer
+local core_gui = game:GetService("CoreGui")
+
+--// UI Creation (The "Kayra" Button)
+local screen_gui = Instance.new("ScreenGui")
+local main_button = Instance.new("TextButton")
+
+screen_gui.Name = "KayraMenu"
+screen_gui.Parent = core_gui
+screen_gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+main_button.Name = "Kayra"
+main_button.Parent = screen_gui
+main_button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+main_button.Position = UDim2.new(0.05, 0, 0.4, 0) -- Adjust position here
+main_button.Size = UDim2.new(0, 150, 0, 50)
+main_button.Font = Enum.Font.SourceSansBold
+main_button.Text = "Kayra"
+main_button.TextColor3 = Color3.fromRGB(255, 255, 255)
+main_button.TextSize = 24
+
+-- Make it draggable (Old school method)
+main_button.Active = true
+main_button.Draggable = true
 
 --// Paths
-local view_models = replicated_storage.Viewmodels
-local skin_module = require(replicated_storage.Items)
+local view_models = replicated_storage:WaitForChild("Viewmodels")
+local skin_module = require(replicated_storage:WaitForChild("Items"))
 
---// Stuff Idk
-local first_slot = "AWP" -- AWP, Deagle (You must equip the default skin of the selected gun first for it to work)
-local second_slot = "Knife" -- (You must equip the default knife first for it to work)
-local first_slot_skin = "" -- Tutorial: Run Inf yield open dex go to: game:GetService("ReplicatedStorage").Viewmodels and copy a skin model name and insert it here
+--// Configuration
+local first_slot = "AWP" 
+local second_slot = "Knife" 
+local first_slot_skin = "" -- Insert skin model name here
 local second_slot_skin = ""
 
---// !! ONLY YOU CAN SEE THE SKINS NO ONE ELSE !!
-
-if first_slot == "AWP" and first_slot_skin ~= "" then
-    for _, awp in next, view_models:GetChildren() do
-        if awp.Name:find(first_slot_skin) then
-            skin_module.AWP["Viewmodel"] = view_models[first_slot_skin]
-            print("Deagle Skin Changed! Made By @kylosilly on discord")
+--// Skin Swapper Logic
+local function apply_skin(weapon_name, skin_name)
+    if skin_name ~= "" and view_models:FindFirstChild(skin_name) then
+        skin_module[weapon_name]["Viewmodel"] = view_models[skin_name]
+        print(weapon_name .. " Skin Changed! Original by @kylosilly")
+        if local_player.Character and local_player.Character:FindFirstChild("Humanoid") then
             local_player.Character.Humanoid.Health = 0
-            break
-        end
-    end
-elseif first_slot == "Deagle" and first_slot_skin ~= "" then
-    for _, deagle in next, view_models:GetChildren() do
-        if deagle.Name:find(first_slot_skin) then
-            skin_module.Deagle["Viewmodel"] = view_models[first_slot_skin]
-            print("Deagle Skin Changed! Made By @kylosilly on discord")
-            local_player.Character.Humanoid.Health = 0
-            break
         end
     end
 end
 
-if second_slot == "Knife" and second_slot_skin ~= "" then
-    for _, knife in next, view_models:GetChildren() do
-        if knife.Name:find(second_slot_skin) then
-            skin_module.Knife["Viewmodel"] = view_models[second_slot_skin]
-            print("Deagle Skin Changed! Made By @kylosilly on discord")
-            local_player.Character.Humanoid.Health = 0
-            break
-        end
-    end
+-- Execute skin swaps
+if first_slot == "AWP" or first_slot == "Deagle" then
+    apply_skin(first_slot, first_slot_skin)
+end
+
+if second_slot == "Knife" then
+    apply_skin("Knife", second_slot_skin)
 end
