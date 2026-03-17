@@ -1,0 +1,52 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+--// Anti Cheat Disabler (ONLY RUN ONCE DELETE THIS LINE AFTER RAN)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua", true))()
+
+--// Services
+local replicated_storage = game:GetService("ReplicatedStorage")
+local local_player = game:GetService("Players").LocalPlayer
+
+--// Paths
+local view_models = replicated_storage.Viewmodels
+local skin_module = require(replicated_storage.Items)
+
+--// Stuff Idk
+local first_slot = "AWP" -- AWP, Deagle (You must equip the default skin of the selected gun first for it to work)
+local second_slot = "Knife" -- (You must equip the default knife first for it to work)
+local first_slot_skin = "" -- Tutorial: Run Inf yield open dex go to: game:GetService("ReplicatedStorage").Viewmodels and copy a skin model name and insert it here
+local second_slot_skin = ""
+
+--// !! ONLY YOU CAN SEE THE SKINS NO ONE ELSE !!
+
+if first_slot == "AWP" and first_slot_skin ~= "" then
+    for _, awp in next, view_models:GetChildren() do
+        if awp.Name:find(first_slot_skin) then
+            skin_module.AWP["Viewmodel"] = view_models[first_slot_skin]
+            print("Deagle Skin Changed! Made By @kylosilly on discord")
+            local_player.Character.Humanoid.Health = 0
+            break
+        end
+    end
+elseif first_slot == "Deagle" and first_slot_skin ~= "" then
+    for _, deagle in next, view_models:GetChildren() do
+        if deagle.Name:find(first_slot_skin) then
+            skin_module.Deagle["Viewmodel"] = view_models[first_slot_skin]
+            print("Deagle Skin Changed! Made By @kylosilly on discord")
+            local_player.Character.Humanoid.Health = 0
+            break
+        end
+    end
+end
+
+if second_slot == "Knife" and second_slot_skin ~= "" then
+    for _, knife in next, view_models:GetChildren() do
+        if knife.Name:find(second_slot_skin) then
+            skin_module.Knife["Viewmodel"] = view_models[second_slot_skin]
+            print("Deagle Skin Changed! Made By @kylosilly on discord")
+            local_player.Character.Humanoid.Health = 0
+            break
+        end
+    end
+end
