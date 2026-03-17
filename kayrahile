@@ -1,59 +1,37 @@
---// Anti Cheat Disabler
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua", true))()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
---// Services
-local replicated_storage = game:GetService("ReplicatedStorage")
-local local_player = game:GetService("Players").LocalPlayer
-local core_gui = game:GetService("CoreGui")
+local Window = Rayfield:CreateWindow({
+   Name = "Rayfield Menu",
+   LoadingTitle = "Loading...",
+   LoadingSubtitle = "by Rayfield",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "RayfieldConfig"
+   },
+   KeySystem = false
+})
 
---// UI Creation (The "Kayra" Button)
-local screen_gui = Instance.new("ScreenGui")
-local main_button = Instance.new("TextButton")
+local Tab = Window:CreateTab("Main Controls", 4483362458) -- Tab icon ID
 
-screen_gui.Name = "KayraMenu"
-screen_gui.Parent = core_gui
-screen_gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-main_button.Name = "Kayra"
-main_button.Parent = screen_gui
-main_button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-main_button.Position = UDim2.new(0.05, 0, 0.4, 0) -- Adjust position here
-main_button.Size = UDim2.new(0, 150, 0, 50)
-main_button.Font = Enum.Font.SourceSansBold
-main_button.Text = "Kayra"
-main_button.TextColor3 = Color3.fromRGB(255, 255, 255)
-main_button.TextSize = 24
-
--- Make it draggable (Old school method)
-main_button.Active = true
-main_button.Draggable = true
-
---// Paths
-local view_models = replicated_storage:WaitForChild("Viewmodels")
-local skin_module = require(replicated_storage:WaitForChild("Items"))
-
---// Configuration
-local first_slot = "AWP" 
-local second_slot = "Knife" 
-local first_slot_skin = "" -- Insert skin model name here
-local second_slot_skin = ""
-
---// Skin Swapper Logic
-local function apply_skin(weapon_name, skin_name)
-    if skin_name ~= "" and view_models:FindFirstChild(skin_name) then
-        skin_module[weapon_name]["Viewmodel"] = view_models[skin_name]
-        print(weapon_name .. " Skin Changed! Original by @kylosilly")
-        if local_player.Character and local_player.Character:FindFirstChild("Humanoid") then
-            local_player.Character.Humanoid.Health = 0
-        end
-    end
-end
-
--- Execute skin swaps
-if first_slot == "AWP" or first_slot == "Deagle" then
-    apply_skin(first_slot, first_slot_skin)
-end
-
-if second_slot == "Knife" then
-    apply_skin("Knife", second_slot_skin)
-end
+local Button = Tab:CreateButton({
+   Name = "yarak",
+   Callback = function()
+       local player = game.Players.LocalPlayer
+       if player.Character and player.Character:FindFirstChild("Humanoid") then
+           -- Set WalkSpeed and JumpPower
+           player.Character.Humanoid.WalkSpeed = 100
+           player.Character.Humanoid.JumpPower = 100
+           
+           -- Ensure UseJumpPower is enabled (modern Roblox default)
+           player.Character.Humanoid.UseJumpPower = true
+           
+           Rayfield:Notify({
+               Title = "Success",
+               Content = "Speed and Jump set to 100",
+               Duration = 3,
+               Image = 4483362458,
+           })
+       end
+   end,
+})
